@@ -1,20 +1,25 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SignupScreen from '../components/SignupScreen';
-import LoginScreen from '../components/LoginScreen';
-// import restul ecranelor
+// src/app/components/NotificationsConfig.js
+import React, { useEffect } from 'react';
+import { View, Button } from 'react-native';
+import * as Notifications from 'expo-notifications';
 
-const Stack = createStackNavigator();
+export default function NotificationsConfig() {
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({ shouldShowAlert: true }),
+    });
+  }, []);
 
-export default function AppNavigator() {
+  const scheduleTest = () => {
+    Notifications.scheduleNotificationAsync({
+      content: { title: 'Test Notification', body: 'Aceasta e o notificare de test.' },
+      trigger: { seconds: 5 },
+    });
+  };
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Signup">
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        {/* restul ecranelor */}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ padding:16 }}>
+      <Button title="Trigger Test Notification" onPress={scheduleTest} />
+    </View>
   );
 }
